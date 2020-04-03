@@ -112,3 +112,8 @@ class Network(dict):
     def N(self):
         """Returns the number of elements of the network"""
         return self._N
+
+    @property
+    def topology(self):
+        """Gets the current network topology"""
+        return self._topology
