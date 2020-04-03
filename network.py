@@ -7,10 +7,7 @@ class Network(dict):
 
     def __init__(self, N):
         """ Initiates an empy network"""
-        #TODO: add a variable _topology to indicate if the connections are set
-        #TODO: alter each connection function to change the _topology variable
-        # and not overwrite the connections.
-
+        self._topology = "None"
         self._N = N
         for i in range(N):
             self[i] = []
@@ -19,6 +16,10 @@ class Network(dict):
     def random_connectctions(self, prob, symmetric=False):
         """Generates a random connection pattern.
         If symetric is true then ij = ji"""
+
+        if self._topology != "None":
+            self.clean_connections()
+
         if not symmetric:
             for i in self.keys():
                 for j in range(self._N):
@@ -33,12 +34,16 @@ class Network(dict):
                             self[i].append(j)
                         if i not in self[j]:
                             self[j].append(i)
+        self._topology = "random"
 
     def ba_connections(self, m=2, m0=2):
         """Connections based on the Barabasi-Albert model
         m0: number of initial nodes that have connections
         k0: absolute number os initial connections.
         Connections are symmetric"""
+
+        if self._topology != "None":
+            self.clean_connections()
 
         if m > m0:
             raise ValueError("m must be smaller or equal to m0!")
@@ -76,6 +81,7 @@ class Network(dict):
                         self[sn[0]].append(nn)
                     m_nn -= 1
             seed_nodes.append(nn)
+        self._topology = "ba"
 
     def ws_connections(self):
         """Connections based on the Watts-Strogatz model"""
@@ -95,6 +101,11 @@ class Network(dict):
 
     def _degree_node(self, node):
         return len(self[node])
+
+    def clean_connections(self):
+        for nid in self.keys():
+            self[nid] = []
+        self._topology = "None"
 
     # properties of the Network model
     @property
