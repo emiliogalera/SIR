@@ -14,9 +14,10 @@ class Network(dict):
             self[i] = []
 
     # connection functions
-    def random_connectctions(self, prob, symmetric=False):
-        """Generates a random connection pattern.
-        If symetric is true then ij = ji"""
+    def er_connection(self, prob, symmetric=False):
+        """Generates a random connection pattern (Erdor-Renyi).
+        If symetric is true then ij = ji
+        prob: probability that neuron i has an edge with neuron j"""
 
         if self._topology != "None":
             self.clean_connections()
@@ -35,7 +36,7 @@ class Network(dict):
                             self[i].append(j)
                         if i not in self[j]:
                             self[j].append(i)
-        self._topology = "random"
+        self._topology = "er"
 
     def ba_connections(self, m=2, m0=2):
         """Connections based on the Barabasi-Albert model
@@ -128,10 +129,6 @@ class Network(dict):
                 if tp[0] not in self[candidate]:
                     self[candidate].append(tp[0])
         self._topology = "ws"
-
-    def er_connection(self):
-        """Connections based on the Erdos-Renyi model"""
-        raise NotImplementedError
 
 
     # auxiliary functions
