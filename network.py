@@ -1,6 +1,7 @@
 """Network object and tools used in the SIR model"""
 
 import random
+import math
 
 class Network(dict):
     """Generates a network"""
@@ -83,9 +84,50 @@ class Network(dict):
             seed_nodes.append(nn)
         self._topology = "ba"
 
-    def ws_connections(self):
-        """Connections based on the Watts-Strogatz model"""
-        raise NotImplementedError
+    def ws_connections(self, k, beta):
+        """Connections based on the Watts-Strogatz model
+        k: number of edges each node has in one side
+        beta: probability of connection rewrite
+        beta = 0 -> ordered network
+        beta = 1 -> random network
+        """
+
+        if self._topology != "None":
+            self.clean_connections()
+
+        if k < math.log(self._N):
+            raise ValueError("Bad k value, must be k > ln(N)")
+
+        for i in self.keys():
+            j_prime = i
+            for j in range(i +1, i + k + 1, 1):
+                j_prime -= 1
+                if j >= self._N:
+                    j = j - self._N
+                if j_prime <= -1:
+                    j_prime = self._N + j_prime
+                self[i].append(j)
+                self[i].append(j_prime)
+
+        if beta > 0:
+            reraute = []
+            for i in self.keys():
+                for j_idx in range(0, len(self[i]), 2):
+                    j = self[i][j_idx]
+                    if random.random() < beta:
+                        reraute.append((i, j))
+
+            for tp in reraute:
+                self[tp[0]].remove(tp[1])
+                self[tp[1]].remove(tp[0])
+                candidate = random.randint(0, self._N - 1)
+                while candidate == tp[0]:
+                    candidate = random.randint(0, self._N - 1)
+                if candidate not in self[tp[0]]:
+                    self[tp[0]].append(candidate)
+                if tp[0] not in self[candidate]:
+                    self[candidate].append(tp[0])
+        self._topology = "ws"
 
     def er_connection(self):
         """Connections based on the Erdos-Renyi model"""
