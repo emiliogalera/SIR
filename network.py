@@ -14,6 +14,7 @@ class Network(dict):
             self[i] = []
 
     # connection functions
+    #TODO: in case of error, add information about correct use of ALL conn mds
     def er_connection(self, prob, symmetric=False):
         """Generates a random connection pattern (Erdor-Renyi).
         If symetric is true then ij = ji
