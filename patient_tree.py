@@ -2,6 +2,15 @@
 
 import random
 
+def new_patient():
+    return {'status': 'I',
+            'id': 0,
+            'infected_by': None,
+            'infects': [],
+            'time': 0,
+            'real_time': 0,
+            'symptoms': False,
+            'pd': 0}
 
 def infection_tree(time, pi, pr, factor):
     """Creates an infection tree from a single infected patient.
@@ -21,14 +30,7 @@ def infection_tree(time, pi, pr, factor):
     patient does not recover, the probability of death raises."""
 
     patients = {}
-    patient0 = {'status': 'I',
-                'id': 0,
-                'infected_by': None,
-                'infects': [],
-                'time': 0,
-                'real_time': 0,
-                'symptoms': False,
-                'pd': 0}
+    patient0 = new_patient()
     id_tracker = 0
     patients[id_tracker] = patient0
 
@@ -52,13 +54,9 @@ def infection_tree(time, pi, pr, factor):
                     id_tracker += 1
                     #print(f"patient {pt_id} infects {id_tracker}!")
                     #print(f"patient {pt_id} infected {patients[pt_id]['infects']}")
-                    np = {'status': 'I',
-                          'id': id_tracker,
-                          'infected_by': patients[pt_id]['id'],
-                          'infects': [], 'time': 0,
-                          'real_time': t,
-                          'symptoms': False,
-                          'pd': 0}
+                    np = new_patient()
+                    np['id'] = id_tracker
+                    np['infected_by'] = patients[pt_id]['id']
                     patients[pt_id]['infects'].append(id_tracker)
                     list_of_new.append(np)
 
@@ -82,3 +80,5 @@ def infection_tree(time, pi, pr, factor):
             patients[np['id']] = np
 
     return patients
+
+
