@@ -84,9 +84,9 @@ class SIR:
             self._patients[nid]['real_time'] += 1
             if self._patients[nid]['status'] == "I":
                 self._patients[nid]['time'] += 1
-            if self._patients[nid]['time'] > 3 and self._patients[nid]['symptoms'] == False:
-                if random.random() < 0.5:
-                    self._patients[nid][ 'symptoms'] = True
+                if self._patients[nid]['time'] > 3 and self._patients[nid]['symptoms'] == False:
+                    if random.random() < 0.5:
+                        self._patients[nid][ 'symptoms'] = True
 
         # infection round
         for nid in self._patients.keys():
@@ -109,12 +109,12 @@ class SIR:
                     ndi.append(nid)
 
         # update status for this round
-        for nid in nri:
-            self._patients[nid]['status'] = "R"
-            self._patients[nid]['symptoms'] = False
+        for pid in nri:
+            self._patients[pid]['status'] = "R"
+            self._patients[pid]['symptoms'] = False
         for pid in nii:
             self._patients[pid]['status'] = "I"
-        for nid in ndi:
+        for pid in ndi:
             self._patients[pid]['status'] = "D"
 
         return nii, nri, ndi

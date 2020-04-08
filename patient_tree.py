@@ -43,9 +43,9 @@ def infection_tree(time, pi, pr, factor):
             if patients[pt_id]['status'] == "I":
                 patients[pt_id]['time'] += 1
                 patients[pt_id]['pd'] = patients[pt_id]['time']/(factor*time)
-            if patients[pt_id]['time'] >= 4 and patients[pt_id]['symptoms'] == False:
-                if random.random() < 0.5:
-                    patients[pt_id]['symptoms'] = True
+                if patients[pt_id]['time'] >= 4 and patients[pt_id]['symptoms'] == False:
+                    if random.random() < 0.5:
+                        patients[pt_id]['symptoms'] = True
 
         # infection round
         for pt_id in patients:
