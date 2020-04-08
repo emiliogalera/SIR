@@ -2,9 +2,9 @@
 
 import random
 
-def new_patient():
-    return {'status': 'I',
-            'id': 0,
+def new_patient(status='I', nid=0):
+    return {'status': status,
+            'id': nid,
             'infected_by': None,
             'infects': [],
             'time': 0,
